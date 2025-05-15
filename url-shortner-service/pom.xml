@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.wz</groupId>
-	<artifactId>url-creation-service</artifactId>
+	<artifactId>url-shortner-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>url-creation-service</name>
-	<description>url-creation-service</description>
+	<name>url-shortner-service</name>
+	<description>URL Shortner Project</description>
 	<url/>
 	<licenses>
 		<license/>
