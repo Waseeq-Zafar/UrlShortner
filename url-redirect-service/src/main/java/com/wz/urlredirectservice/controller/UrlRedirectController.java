@@ -20,7 +20,6 @@ public class UrlRedirectController {
     @GetMapping("/{code}")
     public ResponseEntity<String> getUrl(@PathVariable String code) {
         String longUrl = urlRedirectService.callOtherService(code);
-        System.out.println(longUrl);
         if (longUrl != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", longUrl);

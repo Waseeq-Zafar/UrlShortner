@@ -18,7 +18,7 @@ public class UrlShortService {
         long id = idCounter.getAndUpdate(current -> (current < MAX_COUNTER) ? current + 1 : 1);
         String shortCode = encodeBase62(id);
         urlShortMap.put(shortCode , url);
-        return "http://localhost:8080/" + shortCode;
+        return shortCode;
     }
 
     public String getOriginalUrl(String shortCode) {
