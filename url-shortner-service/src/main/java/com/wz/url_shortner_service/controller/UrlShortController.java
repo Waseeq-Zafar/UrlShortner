@@ -26,12 +26,10 @@ public class UrlShortController {
 
     // GET to /{shortCode} for redirecting
     @GetMapping("/{shortCode}")
-    public ResponseEntity<Void> redirectToOriginal(@PathVariable String shortCode) {
+    public ResponseEntity<String> redirectToOriginal(@PathVariable String shortCode) {
         String originalUrl = urlShortService.getOriginalUrl(shortCode);
         if (originalUrl != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", originalUrl);
-            return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
+            return ResponseEntity.ok(originalUrl);
         } else {
             return ResponseEntity.notFound().build();
         }
