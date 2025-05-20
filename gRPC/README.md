@@ -1,7 +1,10 @@
 🔗 URL Shortener Microservices with API Gateway & gRPC
+
 This project demonstrates a simple URL Shortening Service built using Spring Boot microservices and an API Gateway with gRPC-based internal communication.
 
+
 🧩 Microservices Overview
+
 ✅ Shorten Service (port 8080): Accepts long URLs and returns shortened codes.
 
 🔁 Redirect Service (port 8081): Redirects the short code to the original long URL.
