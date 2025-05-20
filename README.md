@@ -44,23 +44,21 @@ Internal services (Shorten & Redirect) communicate using either:
 You can easily switch between communication styles depending on your use case.
 
 🚀 How to Run
-Clone the Repository
-
+1. Clone the Repository
 bash
 Copy
 Edit
 git clone https://github.com/Waseeq-Zafar/UrlShortner.git
 cd UrlShortner
-Start Services (in separate terminals or via IDE)
-
+2. Start Services (in separate terminals or via IDE)
 Shorten Service → http://localhost:8080
 
 Redirect Service → http://localhost:8081
 
 API Gateway → http://localhost:8082
 
-Restrict internal services:
-In each service’s application.properties file:
+3. Restrict Internal Services
+Add the following in each service’s application.properties:
 
 properties
 Copy
@@ -73,13 +71,13 @@ Enabled by default in many microservice setups.
 API Gateway forwards requests to services via HTTP.
 
 2. ⚡ gRPC-based
-Uses .proto definitions and stubs.
+Uses .proto definitions and generated stubs.
 
 Services communicate over port 9090.
 
 Fast, compact, and ideal for high-performance environments.
 
-To switch between modes, simply comment/uncomment the relevant service beans and configurations.
+✅ To switch between modes, comment/uncomment the relevant Spring Beans or configuration classes.
 
 📬 API Usage (via API Gateway)
 ✅ Create Short URL
@@ -101,28 +99,29 @@ Edit
   "shortUrl": "http://localhost:8082/000001"
 }
 🔁 Redirect to Original URL
-Paste: http://localhost:8082/000001 into browser or Postman
+Use the returned short URL (e.g., http://localhost:8082/000001)
 
-You’ll be redirected to the original URL (HTTP 302)
+📂 Open in browser – You'll be redirected.
+
+🧪 Or send a GET request via Postman.
 
 🔐 Security
-Only API Gateway is exposed externally (port 8082).
+Only API Gateway is publicly exposed on port 8082.
 
-Backend services are restricted to localhost.
+Internal services are bound to localhost (127.0.0.1).
 
-Internal communication is secure and controlled.
+Secure internal communication via REST or gRPC.
 
 🧪 Testing
-Use Postman or cURL to POST long URLs and retrieve short codes.
+Use Postman or cURL for POST and GET requests.
 
-Test redirection by accessing the short URL in the browser or via GET requests.
+Test redirection and URL shortening functionality.
 
 ✨ Summary
-This project includes two working versions of inter-service communication:
+This project includes two working implementations of inter-service communication:
 
-REST-based via RestTemplate
+REST using Spring’s RestTemplate
 
-gRPC-based using protocol buffers
+gRPC using Protocol Buffers and Spring Boot
 
-You can use this as a reference for learning or building production-grade Spring Boot microservices with flexible communication mechanisms.
-
+Both versions are functional and serve as a foundation for scalable, real-world microservices architecture with clean separation, communication control, and security.
