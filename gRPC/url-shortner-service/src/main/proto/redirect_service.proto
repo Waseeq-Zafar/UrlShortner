@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.wz.grpc";
+option java_outer_classname = "RedirectServiceProto";
+
+service RedirectService {
+  rpc GetOriginalUrl (RedirectRequest) returns (RedirectResponse);
+}
+
+message RedirectRequest {
+  string shortCode = 1;
+}
+
+message RedirectResponse {
+  string originalUrl = 1;
+  bool found = 2;
+}
