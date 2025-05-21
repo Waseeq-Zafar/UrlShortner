@@ -1,94 +1,192 @@
 # 🔗 URL Shortener Microservices with API Gateway
 
-This project implements a robust URL Shortening Service using a microservices architecture in Spring Boot. It includes two variations for internal communication: one using RestTemplate (traditional REST API calls) and the other using gRPC (high-performance protocol buffers).
+A robust and production-ready URL Shortening Service built using Spring Boot microservices. This system demonstrates two modes of internal communication:
 
-📦 Project Modules Shorten Service (port 8080) – Accepts long URLs and generates shortened codes.
+- 🌐 **REST-based** using `RestTemplate`
+- ⚡ **gRPC-based** using `Protocol Buffers`
 
-Redirect Service (port 8081) – Redirects requests from short codes to original long URLs.
+---
 
-API Gateway (port 8082) – Acts as a unified entry point and routes traffic to services.
+## 📦 Project Modules
 
-⚙️ Tech Stack Java 17
+| Module           | Port | Description                                      |
+|------------------|------|--------------------------------------------------|
+| **Shorten Service**   | 8080 | Accepts long URLs and generates short codes      |
+| **Redirect Service**  | 8081 | Redirects short codes to original long URLs     |
+| **API Gateway**       | 8082 | Unified entry point that routes traffic to services |
 
-Spring Boot 3.x
+---
 
-Spring Cloud Gateway
+## ⚙️ Tech Stack
 
-gRPC (Protobuf)
+- Java 17  
+- Spring Boot 3.x  
+- Spring Cloud Gateway  
+- gRPC (Protocol Buffers)  
+- RestTemplate  
+- Maven  
+- Docker + Docker Compose (for gRPC variant)  
+- Postman (for API testing)  
 
-RestTemplate
+---
 
-Maven
+## 🏗️ Architecture Overview
 
-Postman (for testing)
+```plaintext
+Client (Browser/Postman)
+        ↓
+   API Gateway (8082)
+    /             \
+Shorten (8080)   Redirect (8081)
+```
 
-🏗️ Architecture Overview java Copy Edit Client (Browser/Postman) ↓ API Gateway (8082) /
-Shorten (8080) Redirect (8081) The API Gateway exposes a single endpoint to external clients.
+- Only **API Gateway** is publicly exposed.
+- Internal services (Shorten & Redirect) communicate using:
+  - ✅ REST (RestTemplate)
+  - ✅ gRPC (Protocol Buffers)
 
-Internal services (Shorten & Redirect) communicate using either:
+You can switch between the two easily based on your needs.
 
-✅ RestTemplate (HTTP-based)
+---
 
-✅ gRPC (Protocol Buffers-based)
+## 🚀 How to Run
 
-You can easily switch between communication styles depending on your use case.
+### 🔧 Clone the Repository
 
-🚀 How to Run Clone the Repository
+```bash
+git clone https://github.com/Waseeq-Zafar/UrlShortner.git
+cd UrlShortner
+```
 
-For RestTemplate:
+---
 
-bash Copy Edit git clone https://github.com/Waseeq-Zafar/UrlShortner.git cd UrlShortner Start Services (in separate terminals or via IDE)
+### ☁️ REST-based Version (No Docker)
 
-Shorten Service → http://localhost:8080
+Run each module via your IDE or separate terminals:
 
-Redirect Service → http://localhost:8081
+```bash
+cd url-shortner-service
+./mvnw spring-boot:run
 
-API Gateway → http://localhost:8082
+cd ../url-redirect-service
+./mvnw spring-boot:run
 
-Restrict internal services: In each service’s application.properties file:
+cd ../api-gateway
+./mvnw spring-boot:run
+```
 
-For gRPC:
+📌 Ensure the following is in `application.properties` for REST mode:
+```properties
+rest.url=http://shorten-service:8080
+# Comment out any gRPC configuration if switching from gRPC
+```
 
-run:
+---
 
-docker-compose up --build
+### 🐳 gRPC-based Version (With Docker)
 
-and done;
+> Default communication mode in Docker is **gRPC**
 
-properties Copy Edit server.address=127.0.0.1 🔄 Communication Modes
+Run with Docker Compose:
 
-☁️ REST-based (using RestTemplate) Enabled by default in many microservice setups.
-API Gateway forwards requests to services via HTTP.
+```bash
+docker compose up --build
+```
 
-⚡ gRPC-based Uses .proto definitions and stubs.
-Services communicate over port 9090.
+📍 Access Services:
+- Shorten: http://localhost:8080  
+- Redirect: http://localhost:8081  
+- API Gateway: http://localhost:8082  
 
-Fast, compact, and ideal for high-performance environments.
+🛠️ gRPC settings are pre-configured using `.proto` files and stubs.
 
-To switch between modes, simply comment/uncomment the relevant service beans and configurations.
+---
 
-📬 API Usage (via API Gateway) ✅ Create Short URL Endpoint: POST http://localhost:8082/api/create Body:
+## 🔄 Communication Modes
 
-json Copy Edit { "longUrl": "https://www.example.com/some/long/path" } Response:
+### ☁️ REST (Default for Local Dev)
+- Uses `RestTemplate`
+- Easier to test/debug
+- Great for traditional setups
 
-json Copy Edit { "shortUrl": "http://localhost:8082/000001" } 🔁 Redirect to Original URL Paste: http://localhost:8082/000001 into browser or Postman
+### ⚡ gRPC (Default for Docker)
+- Uses `.proto` definitions
+- Fast and compact
+- Suitable for high-throughput systems
 
-You’ll be redirected to the original URL (HTTP 302)
+📌 **Switching Modes**:  
+Comment or uncomment relevant beans and change properties accordingly.
 
-🔐 Security Only API Gateway is exposed externally (port 8082).
+---
 
-Backend services are restricted to localhost.
+## 📬 API Usage (via API Gateway)
 
-Internal communication is secure and controlled.
+### ✅ Create Short URL
 
-🧪 Testing Use Postman or cURL to POST long URLs and retrieve short codes.
+- **Endpoint:** `POST http://localhost:8082/api/create`
+- **Request Body:**
 
-Test redirection by accessing the short URL in the browser or via GET requests.
+```json
+{
+  "longUrl": "https://www.example.com/some/long/path"
+}
+```
 
-✨ Summary This project includes two working versions of inter-service communication:
+- **Response:**
 
-REST-based via RestTemplate
+```json
+{
+  "shortUrl": "http://localhost:8082/000001"
+}
+```
 
-gRPC-based using protocol buffers
+---
 
-You can use this as a reference for learning or building production-grade Spring Boot microservices with flexible communication mechanisms.
+### 🔁 Redirect to Original URL
+
+Paste in browser or use Postman:
+
+```
+GET http://localhost:8082/000001
+```
+
+✅ You’ll be redirected to the original long URL (`HTTP 302 Found`)
+
+---
+
+## 🔐 Security
+
+- Only **API Gateway** is externally exposed (`port 8082`)
+- **Shorten** and **Redirect** services are private (inaccessible directly from outside)
+- gRPC uses Docker service names (`shorten-service:9090`) for internal communication
+
+---
+
+## 🧪 Testing
+
+You can test endpoints using:
+- [Postman](https://www.postman.com/)
+- `curl` or any REST client
+
+Example curl call:
+```bash
+curl -X POST http://localhost:8082/api/create \
+     -H "Content-Type: application/json" \
+     -d '{"longUrl": "https://openai.com"}'
+```
+
+---
+
+## ✨ Summary
+
+This project demonstrates:
+
+- ✅ Clean microservices separation
+- ✅ Flexible communication styles (REST and gRPC)
+- ✅ Dockerized setup for gRPC
+- ✅ REST setup for simpler development
+- ✅ Centralized routing with Spring Cloud Gateway
+
+---
+
+🔁 Feel free to switch communication strategies depending on performance, scalability, or team familiarity.
