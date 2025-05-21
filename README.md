@@ -47,6 +47,7 @@ You can easily switch between communication styles depending on your use case.
 Clone the Repository
 
 
+
 For RestTemplate:
 
 bash
@@ -65,6 +66,8 @@ API Gateway → http://localhost:8082
 Restrict internal services:
 In each service’s application.properties file:
 
+
+
 For gRPC:
 
 run:
@@ -72,6 +75,9 @@ run:
 docker-compose up --build 
 
 and done;
+
+
+
 
 properties
 Copy
