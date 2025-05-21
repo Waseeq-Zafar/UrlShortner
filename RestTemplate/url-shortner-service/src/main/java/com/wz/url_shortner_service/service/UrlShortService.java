@@ -15,6 +15,11 @@ public class UrlShortService {
     private static final int SHORT_CODE_LENGTH = 6;
 
     public String createUrl(String url) {
+        for (HashMap.Entry<String, String> entry : urlShortMap.entrySet()) {
+            if (entry.getValue().equals(url)) {
+                return entry.getKey();
+            }
+        }
         long id = idCounter.getAndUpdate(current -> (current < MAX_COUNTER) ? current + 1 : 1);
         String shortCode = encodeBase62(id);
         urlShortMap.put(shortCode , url);
