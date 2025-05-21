@@ -126,6 +126,7 @@ Comment or uncomment relevant beans and change properties accordingly.
 - **Endpoint:** `POST http://localhost:8082/api/create`
 - **Request Body:**
 
+- **Example url:**
 ```raw
 https://www.hotstar.com/in
 ```
