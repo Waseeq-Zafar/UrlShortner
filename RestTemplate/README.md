@@ -65,30 +65,29 @@ This restricts direct external access to the internal ports.
 
 📬 API Usage (via API Gateway)
 ✅ 1. Create a Short URL
-Endpoint: http://localhost:8082/api/create
+- **Endpoint:** `POST http://localhost:8082/api/create`
+- **Request Body:**
 
-Method: POST
+- **Example url:**
+```raw
+https://www.hotstar.com/in
+```
 
-Headers: Content-Type: application/json
+- **Response:**
 
-Body:
+```
+000001
+```
 
-json
-Copy
-Edit
-{
-  "longUrl": "https://www.example.com/some/long/path"
-}
-Response:
+---
 
-json
-Copy
-Edit
-{
-  "shortUrl": "http://localhost:8082/000001"
-}
-🔁 2. Redirect to Original URL
-Paste the returned short URL (e.g., http://localhost:8082/000001) into:
+### 🔁 Redirect to Original URL
+
+Paste in browser or use Postman:
+
+```
+GET http://localhost:8082/000001
+```
 
 🔗 Browser – You'll be redirected to the original URL.
 
