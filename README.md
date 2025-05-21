@@ -26,6 +26,7 @@ Docker + Docker Compose
 
 Postman (for testing)
 
+
 🏗️ Architecture Overview
 plaintext
 Copy
@@ -42,6 +43,7 @@ Internal services (Shorten and Redirect) communicate using:
 ✅ REST (RestTemplate)
 
 ✅ gRPC (default in Docker setup)
+
 
 🚀 How to Run
 🔧 Prerequisites
