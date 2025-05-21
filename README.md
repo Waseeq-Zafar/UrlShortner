@@ -1,13 +1,13 @@
-
 🔗 URL Shortener Microservices with API Gateway
 
-This project implements a robust URL Shortening Service using a microservices architecture in Spring Boot, with internal communication through both REST (RestTemplate) and gRPC (Protocol Buffers).
+This project implements a robust URL Shortening Service using a microservices architecture in Spring Boot. It includes two variations for internal communication: one using RestTemplate (traditional REST API calls) and the other using gRPC (high-performance protocol buffers).
 
 📦 Project Modules
-Module	Port	Description
-Shorten Service	8080	Accepts long URLs and generates shortened codes
-Redirect Service	8081	Redirects short codes to original long URLs
-API Gateway	8082	Unified entry point, routes traffic to services
+Shorten Service (port 8080) – Accepts long URLs and generates shortened codes.
+
+Redirect Service (port 8081) – Redirects requests from short codes to original long URLs.
+
+API Gateway (port 8082) – Acts as a unified entry point and routes traffic to services.
 
 ⚙️ Tech Stack
 Java 17
@@ -16,67 +16,88 @@ Spring Boot 3.x
 
 Spring Cloud Gateway
 
-gRPC (Protocol Buffers)
+gRPC (Protobuf)
 
 RestTemplate
 
 Maven
 
-Docker + Docker Compose
-
 Postman (for testing)
 
-
 🏗️ Architecture Overview
-plaintext
+java
 Copy
 Edit
 Client (Browser/Postman)
         ↓
    API Gateway (8082)
-    /             \
+    /            \
 Shorten (8080)   Redirect (8081)
-The API Gateway exposes a single public endpoint (8082)
+The API Gateway exposes a single endpoint to external clients.
 
-Internal services (Shorten and Redirect) communicate using:
+Internal services (Shorten & Redirect) communicate using either:
 
-✅ REST (RestTemplate)
+✅ RestTemplate (HTTP-based)
 
-✅ gRPC (default in Docker setup)
+✅ gRPC (Protocol Buffers-based)
 
+You can easily switch between communication styles depending on your use case.
 
 🚀 How to Run
-🔧 Prerequisites
-Docker & Docker Compose installed
+Clone the Repository
 
-🔄 Run via Docker (gRPC mode default)
-Clone the repository:
+
+For RestTemplate:
 
 bash
 Copy
 Edit
 git clone https://github.com/Waseeq-Zafar/UrlShortner.git
 cd UrlShortner
-Start all services using Docker Compose:
+Start Services (in separate terminals or via IDE)
 
-bash
+Shorten Service → http://localhost:8080
+
+Redirect Service → http://localhost:8081
+
+API Gateway → http://localhost:8082
+
+Restrict internal services:
+In each service’s application.properties file:
+
+For gRPC:
+
+run:
+
+docker-compose up --build 
+
+and done;
+
+properties
 Copy
 Edit
-docker compose up --build
-Access endpoints:
+server.address=127.0.0.1
+🔄 Communication Modes
+1. ☁️ REST-based (using RestTemplate)
+Enabled by default in many microservice setups.
 
-Shorten: http://localhost:8080
+API Gateway forwards requests to services via HTTP.
 
-Redirect: http://localhost:8081
 
-API Gateway: http://localhost:8082
 
+2. ⚡ gRPC-based
+Uses .proto definitions and stubs.
+
+Services communicate over port 9090.
+
+Fast, compact, and ideal for high-performance environments.
+
+To switch between modes, simply comment/uncomment the relevant service beans and configurations.
 
 📬 API Usage (via API Gateway)
 ✅ Create Short URL
 Endpoint: POST http://localhost:8082/api/create
-
-Request Body:
+Body:
 
 json
 Copy
@@ -93,105 +114,28 @@ Edit
   "shortUrl": "http://localhost:8082/000001"
 }
 🔁 Redirect to Original URL
+Paste: http://localhost:8082/000001 into browser or Postman
 
-Open http://localhost:8082/000001 in browser
+You’ll be redirected to the original URL (HTTP 302)
 
-OR use Postman to send a GET request
-
-You’ll be redirected to the original long URL
-
-🛠️ Switch Communication Mode
-Default in Docker is gRPC
-
-To switch to REST:
-
-Comment out gRPC beans in both services
-
-Enable RestTemplate-based communication
-
-Change application.properties accordingly:
-
-properties
-Copy
-Edit
-grpc.client.urlShortener.address=static://shorten-service:9090  # gRPC
-# For REST, set rest.url=http://shorten-service:8080
-🐳 Docker Compose File (pre-configured for gRPC)
-yaml
-Copy
-Edit
-version: '3.8'
-
-services:
-
-  shorten-service:
-    container_name: shorten-service
-    build:
-      context: ./url-shortner-service
-    ports:
-      - "8080:8080"
-    environment:
-      - SERVER_PORT=8080
-      - SERVER_ADDRESS=0.0.0.0
-      - GRPC_SERVER_PORT=9090
-      - GRPC_SERVER_ADDRESS=0.0.0.0
-    networks:
-      - url-network
-
-  redirect-service:
-    container_name: redirect-service
-    build:
-      context: ./url-redirect-service
-    ports:
-      - "8081:8081"
-    environment:
-      - SERVER_PORT=8081
-      - SERVER_ADDRESS=0.0.0.0
-      - grpc.client.urlShortener.address=static://shorten-service:9090
-    depends_on:
-      - shorten-service
-    networks:
-      - url-network
-
-  api-gateway:
-    container_name: api-gateway
-    build:
-      context: ./api-gateway
-    ports:
-      - "8082:8082"
-    environment:
-      - SERVER_PORT=8082
-      - SERVER_ADDRESS=0.0.0.0
-    depends_on:
-      - shorten-service
-      - redirect-service
-    networks:
-      - url-network
-
-networks:
-  url-network:
-    driver: bridge
-    
 🔐 Security
-Only the API Gateway is exposed to external clients (port 8082)
+Only API Gateway is exposed externally (port 8082).
 
-Internal services are private and only communicate over the Docker network
+Backend services are restricted to localhost.
 
-gRPC communication uses service names (e.g., shorten-service:9090)
+Internal communication is secure and controlled.
 
 🧪 Testing
-Use Postman or curl to test:
+Use Postman or cURL to POST long URLs and retrieve short codes.
 
-Shortening URLs
-
-Redirecting from short URLs
+Test redirection by accessing the short URL in the browser or via GET requests.
 
 ✨ Summary
-This URL Shortener Microservices project supports both:
+This project includes two working versions of inter-service communication:
 
-✅ REST using Spring’s RestTemplate
+REST-based via RestTemplate
 
-✅ gRPC using Protocol Buffers and Spring Boot
+gRPC-based using protocol buffers
 
-It is containerized with Docker and ready for production-style deployments with separation of concerns, internal-only services, and API Gateway routing.
+You can use this as a reference for learning or building production-grade Spring Boot microservices with flexible communication mechanisms.
 
