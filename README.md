@@ -1,5 +1,6 @@
 
 🔗 URL Shortener Microservices with API Gateway
+
 This project implements a robust URL Shortening Service using a microservices architecture in Spring Boot, with internal communication through both REST (RestTemplate) and gRPC (Protocol Buffers).
 
 📦 Project Modules
