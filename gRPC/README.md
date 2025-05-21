@@ -65,21 +65,9 @@ git clone https://github.com/Waseeq-Zafar/UrlShortner.git
 cd UrlShortner
 ```
 
-#### 2. Start all services
-
-```bash
-docker compose up --build
+```run:
+docker-compose up --build
 ```
-
-#### 3. Access Services
-
-| Service         | URL                     |
-|-----------------|--------------------------|
-| Shorten         | http://localhost:8080    |
-| Redirect        | http://localhost:8081    |
-| API Gateway     | http://localhost:8082    |
-
----
 
 ## 📬 API Usage (via API Gateway)
 
@@ -112,25 +100,6 @@ docker compose up --build
 
 ---
 
-## 🛠️ Switch Communication Mode
-
-- **Default mode in Docker:** gRPC
-
-### 🔄 To switch to REST:
-
-1. Comment out the gRPC beans in both `shorten` and `redirect` services  
-2. Enable `RestTemplate`-based communication  
-3. Change `application.properties` like so:
-
-```properties
-# gRPC
-grpc.client.urlShortener.address=static://shorten-service:9090
-
-# For REST mode
-rest.url=http://shorten-service:8080
-```
-
----
 
 ## 🐳 Docker Compose File (gRPC default)
 
