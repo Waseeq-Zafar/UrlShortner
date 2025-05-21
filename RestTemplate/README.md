@@ -63,7 +63,9 @@ Edit
 server.address=127.0.0.1
 This restricts direct external access to the internal ports.
 
-📬 API Usage (via API Gateway)
+```
+---
+### 📬 API Usage (via API Gateway)
 ✅ 1. Create a Short URL
 - **Endpoint:** `POST http://localhost:8082/api/create`
 - **Request Body:**
@@ -71,7 +73,7 @@ This restricts direct external access to the internal ports.
 - **Example url:**
 ```raw
 https://www.hotstar.com/in
-```
+
 
 - **Response:**
 
