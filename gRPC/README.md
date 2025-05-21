@@ -76,18 +76,15 @@ docker-compose up --build
 - **Endpoint:** `POST http://localhost:8082/api/create`
 - **Request Body:**
 
-```json
-{
-  "longUrl": "https://www.example.com/some/long/path"
-}
+- **Example url:**
+```raw
+https://www.hotstar.com/in
 ```
 
 - **Response:**
 
-```json
-{
-  "shortUrl": "http://localhost:8082/000001"
-}
+```
+000001
 ```
 
 ---
