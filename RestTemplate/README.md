@@ -73,7 +73,7 @@ This restricts direct external access to the internal ports.
 - **Example url:**
 ```raw
 https://www.hotstar.com/in
-
+```
 
 - **Response:**
 
