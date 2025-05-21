@@ -1,125 +1,140 @@
+# 🔗 URL Shortener Microservices with API Gateway
 
-🔗 URL Shortener Microservices with API Gateway
+This project implements a robust URL Shortening Service using a **microservices architecture** in **Spring Boot**, with internal communication via both:
 
-This project implements a robust URL Shortening Service using a microservices architecture in Spring Boot, with internal communication through both REST (RestTemplate) and gRPC (Protocol Buffers).
+- ☁️ **REST** (`RestTemplate`)
+- ⚡ **gRPC** (`Protocol Buffers`)
 
-📦 Project Modules
-Module	Port	Description
-Shorten Service	8080	Accepts long URLs and generates shortened codes
-Redirect Service	8081	Redirects short codes to original long URLs
-API Gateway	8082	Unified entry point, routes traffic to services
+---
 
-⚙️ Tech Stack
-Java 17
+## 📦 Project Modules
 
-Spring Boot 3.x
+| Module           | Port | Description                                      |
+|------------------|------|--------------------------------------------------|
+| **Shorten Service**   | 8080 | Accepts long URLs and generates short codes      |
+| **Redirect Service**  | 8081 | Redirects short codes to original long URLs     |
+| **API Gateway**       | 8082 | Unified entry point, routes traffic to services |
 
-Spring Cloud Gateway
+---
 
-gRPC (Protocol Buffers)
+## ⚙️ Tech Stack
 
-RestTemplate
+- Java 17  
+- Spring Boot 3.x  
+- Spring Cloud Gateway  
+- gRPC (Protocol Buffers)  
+- RestTemplate  
+- Maven  
+- Docker + Docker Compose  
+- Postman (for API testing)  
 
-Maven
+---
 
-Docker + Docker Compose
+## 🏗️ Architecture Overview
 
-Postman (for testing)
-
-
-🏗️ Architecture Overview
-plaintext
-Copy
-Edit
+```plaintext
 Client (Browser/Postman)
         ↓
    API Gateway (8082)
     /             \
 Shorten (8080)   Redirect (8081)
-The API Gateway exposes a single public endpoint (8082)
+```
 
-Internal services (Shorten and Redirect) communicate using:
+- Only **API Gateway** (8082) is publicly exposed.
+- Internal services (`Shorten` and `Redirect`) communicate using:
+  - ✅ **REST** (`RestTemplate`)
+  - ✅ **gRPC** (default in Docker setup)
 
-✅ REST (RestTemplate)
+---
 
-✅ gRPC (default in Docker setup)
+## 🚀 How to Run
 
+### 🔧 Prerequisites
 
-🚀 How to Run
-🔧 Prerequisites
-Docker & Docker Compose installed
+- Docker  
+- Docker Compose  
 
-🔄 Run via Docker (gRPC mode default)
-Clone the repository:
+---
 
-bash
-Copy
-Edit
+### 🐳 Run via Docker (gRPC is default)
+
+#### 1. Clone the repository
+
+```bash
 git clone https://github.com/Waseeq-Zafar/UrlShortner.git
 cd UrlShortner
-Start all services using Docker Compose:
+```
 
-bash
-Copy
-Edit
+#### 2. Start all services
+
+```bash
 docker compose up --build
-Access endpoints:
+```
 
-Shorten: http://localhost:8080
+#### 3. Access Services
 
-Redirect: http://localhost:8081
+| Service         | URL                     |
+|-----------------|--------------------------|
+| Shorten         | http://localhost:8080    |
+| Redirect        | http://localhost:8081    |
+| API Gateway     | http://localhost:8082    |
 
-API Gateway: http://localhost:8082
+---
 
+## 📬 API Usage (via API Gateway)
 
-📬 API Usage (via API Gateway)
-✅ Create Short URL
-Endpoint: POST http://localhost:8082/api/create
+### ✅ Create Short URL
 
-Request Body:
+- **Endpoint:** `POST http://localhost:8082/api/create`
+- **Request Body:**
 
-json
-Copy
-Edit
+```json
 {
   "longUrl": "https://www.example.com/some/long/path"
 }
-Response:
+```
 
-json
-Copy
-Edit
+- **Response:**
+
+```json
 {
   "shortUrl": "http://localhost:8082/000001"
 }
-🔁 Redirect to Original URL
+```
 
-Open http://localhost:8082/000001 in browser
+---
 
-OR use Postman to send a GET request
+### 🔁 Redirect to Original URL
 
-You’ll be redirected to the original long URL
+- Visit: `http://localhost:8082/000001`  
+- Or use Postman to send a **GET** request  
+- You'll be redirected (`HTTP 302`) to the original long URL
 
-🛠️ Switch Communication Mode
-Default in Docker is gRPC
+---
 
-To switch to REST:
+## 🛠️ Switch Communication Mode
 
-Comment out gRPC beans in both services
+- **Default mode in Docker:** gRPC
 
-Enable RestTemplate-based communication
+### 🔄 To switch to REST:
 
-Change application.properties accordingly:
+1. Comment out the gRPC beans in both `shorten` and `redirect` services  
+2. Enable `RestTemplate`-based communication  
+3. Change `application.properties` like so:
 
-properties
-Copy
-Edit
-grpc.client.urlShortener.address=static://shorten-service:9090  # gRPC
-# For REST, set rest.url=http://shorten-service:8080
-🐳 Docker Compose File (pre-configured for gRPC)
-yaml
-Copy
-Edit
+```properties
+# gRPC
+grpc.client.urlShortener.address=static://shorten-service:9090
+
+# For REST mode
+rest.url=http://shorten-service:8080
+```
+
+---
+
+## 🐳 Docker Compose File (gRPC default)
+
+```yaml
 version: '3.8'
 
 services:
@@ -171,27 +186,45 @@ services:
 networks:
   url-network:
     driver: bridge
-    
-🔐 Security
-Only the API Gateway is exposed to external clients (port 8082)
+```
 
-Internal services are private and only communicate over the Docker network
+---
 
-gRPC communication uses service names (e.g., shorten-service:9090)
+## 🔐 Security
 
-🧪 Testing
-Use Postman or curl to test:
+- Only **API Gateway (8082)** is exposed to external clients  
+- Internal services communicate privately via Docker network  
+- gRPC uses service discovery by name (`shorten-service:9090`)
 
-Shortening URLs
+---
 
-Redirecting from short URLs
+## 🧪 Testing
 
-✨ Summary
-This URL Shortener Microservices project supports both:
+Use Postman or `curl` for:
 
-✅ REST using Spring’s RestTemplate
+- ✅ Shortening URLs  
+- ✅ Redirecting from short URLs  
 
-✅ gRPC using Protocol Buffers and Spring Boot
+Example `curl`:
 
-It is containerized with Docker and ready for production-style deployments with separation of concerns, internal-only services, and API Gateway routing.
+```bash
+curl -X POST http://localhost:8082/api/create \
+     -H "Content-Type: application/json" \
+     -d '{"longUrl": "https://openai.com"}'
+```
 
+---
+
+## ✨ Summary
+
+This microservices-based URL Shortener project provides:
+
+- ✅ REST support using `RestTemplate`  
+- ✅ gRPC support using `Protocol Buffers`  
+- ✅ API Gateway for unified routing  
+- ✅ Dockerized setup for gRPC communication  
+- ✅ Clear separation of concerns with internal/private services
+
+📦 Perfect for learning or production-style microservices architecture!
+
+---
