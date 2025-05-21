@@ -127,7 +127,6 @@ Comment or uncomment relevant beans and change properties accordingly.
 - **Request Body:**
 
 ```raw
-example:
 https://www.hotstar.com/in
 ```
 
@@ -159,18 +158,6 @@ GET http://localhost:8082/000001
 
 ---
 
-## 🧪 Testing
-
-You can test endpoints using:
-- [Postman](https://www.postman.com/)
-- `curl` or any REST client
-
-Example curl call:
-```bash
-curl -X POST http://localhost:8082/api/create \
-     -H "Content-Type: application/json" \
-     -d '{"longUrl": "https://openai.com"}'
-```
 
 ---
 
