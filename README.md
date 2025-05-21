@@ -126,18 +126,15 @@ Comment or uncomment relevant beans and change properties accordingly.
 - **Endpoint:** `POST http://localhost:8082/api/create`
 - **Request Body:**
 
-```json
-{
-  "longUrl": "https://www.example.com/some/long/path"
-}
+```raw
+example:
+https://www.hotstar.com/in
 ```
 
 - **Response:**
 
-```json
-{
-  "shortUrl": "http://localhost:8082/000001"
-}
+```
+000001
 ```
 
 ---
